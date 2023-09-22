@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceuil</title>
+</head>
+
+<body>
+    <div style=" width: 50%; margin: auto;">
+        <% const nom="samfresh09" %>
+
+            <h1> Application de:
+                <%= nom  %>
+            </h1>
+            <%- include ("./composant/header") %>
+                <section>
+                    <form action="/formule" method="POST">
+                        <input type="hidden" id="id" name="id"><br><br>
+
+                        <label for="title">Titre</label><br>
+                        <input type="text" id="title" name="title"><br><br>
+                        <label for="contenu">Description</label><br>
+                        <textarea id="contenu" rows="6" cols="30" name="contenu"></textarea><br><br>
+
+                        <button type="submit">Enregistrer</button>
+                    </form>
+
+                    <p>-------------------------------------------------------------------------------</p>
+
+
+                </section>
+                <section>
+                    <h2>Liste des notes</h2>
+                    <ul>
+                        <% for(i=0; i<result.length; i++) { %>
+                            <li>
+                                <%= result[i].title + " : "+ result[i].contenu %>
+                                    <button value="supprimer" onclick="supprimer('<%= result[i].id %>')">supprimer</button>
+                                    <button value="modifier" onclick=" remplirformulaire('<%= result[i].id %>','<%= result[i].title %>','<%= result[i].contenu %>' ) ">Modifier</button>
+
+                            </li><br>
+
+                            <% } %>
+
+                    </ul>
+                </section>
+    </div>
+
+</body>
+<script>
+    function remplirformulaire(id, title, contenu) {
+        document.getElementById('id').value = id;
+        document.getElementById('title').value = title;
+        document.getElementById('contenu').value = contenu;
+
+    }
+
+    function supprimer(id) {
+        let pointFinal = "supprime/" + id
+        fetch(
+            pointFinal, {
+                method: "DELETE"
+            }
+        ).then(
+            (reponse) => reponse.json()
+        ).then(
+            (donnee) => window.location.href = donnee.routeRacine
+        ).catch((erreur) => console.log(erreur))
+    }
+</script>
+
+</html>
